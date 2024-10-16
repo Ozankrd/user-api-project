@@ -1,5 +1,6 @@
 name: Node.js CI
 
+# Déclenchement du workflow sur les push et pull requests sur la branche master
 on:
   push:
     branches:
@@ -14,23 +15,26 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['14.x', '16.x', '18.x']
+        node-version: ['14.x', '16.x', '18.x']  # Versions de Node.js à tester
 
     steps:
+      # Étape 1 : Récupérer le code du dépôt
       - uses: actions/checkout@v4
+
+      # Étape 2 : Configurer la version de Node.js
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Installer les dépendances
+      # Étape 3 : Installer les dépendances
       - name: Install dependencies
         run: npm install
 
-      # Construire le projet si nécessaire
+      # Étape 4 : Construire le projet (si nécessaire)
       - name: Build the project
-        run: npm run build --if-present
+        run: npm run build --if-present  # Ignore si aucun script "build" n'est défini
 
-      # Exécuter les tests
+      # Étape 5 : Exécuter les tests
       - name: Run tests
         run: npm test
